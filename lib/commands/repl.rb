@@ -1,3 +1,6 @@
+#help <<-EOL
+#  Run a repl-mode comman processor
+#EOL
 #command :repl do
   #command :quit do
     #exit

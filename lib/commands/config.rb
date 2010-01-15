@@ -6,4 +6,5 @@ command :config do
   [:url, :project, :username, :password].each do |item|
     result[item] = prompt item
   end
+  store_config(result)
 end
