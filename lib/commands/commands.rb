@@ -1,8 +1,10 @@
-help <<-EOL
-  List all commands
-EOL
 command :commands do
-  all_commands.each do |command|
-    puts
+  help <<-EOL
+    List all commands
+  EOL
+  execute do
+    all_commands.each do |command|
+      puts
+    end
   end
 end

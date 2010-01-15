@@ -60,7 +60,7 @@ module CPBugger
     end
 
     def store
-      YAML.dump(to_hash)
+      File.open(@path, "w") {|f| f.puts YAML.dump(to_hash) }
     end
   end
 
