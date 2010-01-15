@@ -12,10 +12,10 @@ include System::Net
 
 WIC = Microsoft::TeamFoundation::WorkItemTracking::Client
 
-require File.dirname(__FILE__) + "/connection.rb"
-require File.dirname(__FILE__) + "/work_item.rb"
-require File.dirname(__FILE__) + "/project.rb"
-require File.dirname(__FILE__) + "/node.rb"
-require File.dirname(__FILE__) + "/node_list.rb"
+require File.dirname(__FILE__) + "/tfs/connection"
+require File.dirname(__FILE__) + "/tfs/work_item"
+require File.dirname(__FILE__) + "/tfs/project"
+require File.dirname(__FILE__) + "/tfs/node"
+require File.dirname(__FILE__) + "/tfs/node_list"
 
-require File.dirname(__FILE__) + "/../ext/object.rb"
+require File.dirname(__FILE__) + "/../ext"
