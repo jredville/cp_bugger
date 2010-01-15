@@ -1,7 +1,7 @@
-#help <<-EOL
-#  Run a repl-mode comman processor
-#EOL
-#command :repl do
+help <<-EOL
+  Run a repl-mode command processor
+EOL
+command :repl do
   #command :quit do
     #exit
   #end
@@ -12,4 +12,4 @@
     #get_command
     #process_command
   #end
-#end
+end
