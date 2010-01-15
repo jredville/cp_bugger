@@ -1,9 +1,7 @@
 module TFS
   class Connection
-    attr_accessor :config
     attr_accessor :user
     attr_accessor :url
-    attr_accessor :password
     attr_accessor :project
     attr_accessor :store
     

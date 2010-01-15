@@ -18,4 +18,4 @@ require File.dirname(__FILE__) + "/tfs/project"
 require File.dirname(__FILE__) + "/tfs/node"
 require File.dirname(__FILE__) + "/tfs/node_list"
 
-require File.dirname(__FILE__) + "/../ext"
+require File.dirname(__FILE__) + "/ext"
