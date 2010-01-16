@@ -4,6 +4,7 @@ command :new_task do
   EOL
   param :title
   execute do
+    extend_with TFSExtensions
     new_task
     @task.title = @title
   end

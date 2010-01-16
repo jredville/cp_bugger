@@ -4,6 +4,7 @@ command :new_bug do
   EOL
   param :title
   execute do
+    extend_with TFSExtensions
     new_bug
     @bug.title = @title
   end

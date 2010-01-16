@@ -15,6 +15,10 @@ module CPBugger
         Config.from_hash(result)
         Config.store
       end
+
+      def extend_with(mod)
+        extend mod
+      end
     end
   end
 end
