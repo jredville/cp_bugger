@@ -4,7 +4,7 @@ module CPBugger
       def self.load_commands
         path = File.expand_path(File.dirname(__FILE__) + "/../../commands")
         Dir.chdir(path) do
-          Dir.["*.rb"].each do |file|
+          Dir["*.rb"].each do |file|
             load_command file
           end
         end

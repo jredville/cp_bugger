@@ -4,7 +4,8 @@ require 'cp_bugger\runner'
 require 'cp_bugger\config'
 
 require 'cp_bugger\command'
-require 'tfs'
+puts "disabled #{__FILE__} #{__LINE__}"
+#require 'tfs'
 require 'ext'
 
 def command(name, &blk)

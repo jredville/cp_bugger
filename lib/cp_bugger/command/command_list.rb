@@ -17,7 +17,7 @@ module CPBugger
       end
 
       def [](val)
-        @list.select {|e| e == val}
+        @list.select {|e| e == val}[0]
       end
     end
   end

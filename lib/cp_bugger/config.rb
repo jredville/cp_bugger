@@ -3,11 +3,12 @@ require 'yaml'
 
 module CPBugger
   class Config
+    include Singleton
     class << self
       def paths
-        root_dir = File.expand_path(Dir.dirname(__FILE__) + "/../../")
-        ["~", "~\\cp_bugger", "~\\.cp_bugger", root_dir, "."].map do |p|
-          File.expand_path(p)
+        root_dir = File.expand_path(File.dirname(__FILE__) + "/../../")
+        ["~", "~\\cp_bugger", "~\\.cp_bugger", root_dir, "."].map do |path|
+          File.expand_path(path)
         end
       end
       
@@ -18,14 +19,15 @@ module CPBugger
       def config
         config_file = "cp_bugger.yaml"
         
-        path = paths.each do |dir|
-          test_path = File.join(path, config_file)
-          break test_path if File.exists? test_path
-        end
+        path = paths.select do |dir|
+          test_path = File.join(dir, config_file)
+          File.exists? test_path
+        end[0]
+        
         if path
           instance.path = path
         else
-          raise ConfigNotFoundError
+          raise ConfigNotFoundError.new
         end
         instance.load
       end
@@ -38,21 +40,25 @@ module CPBugger
 
     # write once
     def path=(val)
-      @path ||= path
+      @path ||= File.expand_path(val)
+    end
+
+    def set_default_path
+      @path = File.expand_path("~/cp_bugger.yaml")
     end
 
     def from_hash(hash)
       self.url = hash[:url]
       self.project = hash[:project]
       self.username = hash[:username]
-      self.password = hash[:password]
+      @password = hash[:password]
     end
 
     def to_hash
       {:url => url,
        :project => project,
        :username => username,
-       :password => password}
+       :password => @password}
     end
 
     def load
@@ -60,6 +66,7 @@ module CPBugger
     end
 
     def store
+      puts "Storing config file"
       File.open(@path, "w") {|f| f.puts YAML.dump(to_hash) }
     end
   end

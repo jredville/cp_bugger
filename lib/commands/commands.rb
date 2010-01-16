@@ -4,7 +4,7 @@ command :commands do
   EOL
   execute do
     all_commands.each do |command|
-      puts
+      puts command.to_s
     end
   end
 end
