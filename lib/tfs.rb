@@ -1,4 +1,5 @@
 $: << File.join(File.expand_path(ENV['DevEnvDir']), "PrivateAssemblies")
+$: << File.join(File.expand_path(ENV['DevEnvDir']), "ReferenceAssemblies", "v2.0")
 require 'Microsoft.TeamFoundation.Client'
 require 'Microsoft.TeamFoundation.WorkItemTracking.Client'
 require 'Microsoft.TeamFoundation.VersionControl.Client'

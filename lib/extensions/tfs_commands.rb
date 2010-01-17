@@ -1,5 +1,4 @@
-puts "disabled #{__FILE__} #{__LINE__}"
-#require File.dirname(__FILE__) + "/../tfs"
+require File.dirname(__FILE__) + "/../tfs"
 
 module TFSExtensions
   def new_bug
