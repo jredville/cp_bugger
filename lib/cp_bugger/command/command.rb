@@ -62,7 +62,7 @@ module CPBugger
         end
       end
 
-      def validate(*params)
+      def validate(params)
         @params.zip(params).each do |name, value|
           @validated_params[name] = value or raise ParameterError.new(name)
         end

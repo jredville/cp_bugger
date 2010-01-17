@@ -27,11 +27,10 @@ module TFS
   end
   
   class WorkItem < AbstractWorkItem
-    valid_values :valid_statuses, "State"
-    valid_values :valid_types, "WorkItemType"
-    valid_values :valid_impacts, "Code Studio Rank"
+    valid_values :valid_status, "State"
+    valid_values :valid_type, "WorkItemType"
+    valid_values :valid_impact, "Code Studio Rank"
     valid_values :valid_assigned_to, "Assigned To"
-    valid_values :valid_releases_and_components, "Node Name"  
 
     wi_attr :type, "WorkItemType"
     wi_attr :status, "State"
@@ -44,20 +43,20 @@ module TFS
       @work_item.validate.map &:name
     end
 
-    def valid_components
+    def valid_component
       @project.area_nodes
     end
 
-    def valid_releases
+    def valid_release
       @project.iteration_nodes
     end
 
     def release=(val)
-      @work_item.fields['IterationID'].value = valid_releases.select_node(val).id
+      @work_item.fields['IterationID'].value = valid_release.select_node(val).id
     end
 
     def component=(val)
-      @work_item.fields['AreaID'].value = valid_components.select_node(val).id
+      @work_item.fields['AreaID'].value = valid_component.select_node(val).id
     end
      
     def attachments

@@ -10,12 +10,12 @@ module TFS
     end
 
     def build_list(node, list = [])
-      list << node
       children = node.children
       if children.empty?
         list
       else
         children.each do |child|
+          list << child
           list = build_list(child, list)
         end
       end
@@ -29,12 +29,23 @@ module TFS
     end
 
     def select_node(val)
+      if val.is_a?(Node)
+        val = val.name
+      end
       node = list.select {|e| e.name == val}[0]
       node or raise NodeNotFoundError.new
     end
 
+    def length
+      @list.length
+    end
+
+    def [](val)
+      @list[val]
+    end
+
     def inspect
-      "#<TFS::NodeList:#{inspect_id} ROOT:#{@root}>"
+      "#<TFS::NodeList:#{inspect_id} ROOT:#{@root.name}>"
     end
   end
 

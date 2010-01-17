@@ -39,6 +39,10 @@ module TFS
       "#<TFS::Node:#{inspect_id} Name:#{name} Type:#{type}>"
     end
 
+    def to_s
+      name
+    end
+    
     def method_missing(meth, *args, &blk)
       @node.send(meth, *args, &blk)
     end

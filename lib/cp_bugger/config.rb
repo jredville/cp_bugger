@@ -25,6 +25,7 @@ module CPBugger
         end[0]
         
         if path
+          path = File.join(path, config_file)
           instance.path = path
         else
           raise ConfigNotFoundError.new
@@ -48,10 +49,10 @@ module CPBugger
     end
 
     def from_hash(hash)
-      self.url = hash[:url]
-      self.project = hash[:project]
-      self.username = hash[:username]
-      @password = hash[:password]
+      self.url = hash[:url].chomp
+      self.project = hash[:project].chomp
+      self.username = hash[:username].chomp
+      @password = hash[:password].chomp
     end
 
     def to_hash
@@ -62,7 +63,9 @@ module CPBugger
     end
 
     def load
-      from_hash(YAML.load(@path))
+      File.open(@path, "r") do |f|
+        from_hash(YAML.load(f))
+      end
     end
 
     def store

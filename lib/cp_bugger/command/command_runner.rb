@@ -19,6 +19,10 @@ module CPBugger
       def extend_with(mod)
         extend mod
       end
+
+      def repl_loop(&blk)
+        
+      end
     end
   end
 end
