@@ -9,21 +9,36 @@ def setup
   ait
 end
 
-def run
-  puts "> Fetching fixed and closed work items from codeplex ..."
+def run(release)
   ait = setup
-  ait.fetch_workitems :type => 'fixed'
-  ait.fetch_workitems :type => 'closed'
-  puts '> [DONE]'
+  releases = ait.fetch_releases
+  if release.nil?
+    while true
+      puts "> Select release:"
+      puts releases.join(', ')
+      print '> '
+      release = gets.strip
+      (puts "Goodbye"; exit(1)) if ['quit', 'exit'].include? release
+      break if releases.include? release
+      $stderr.puts "> [ERROR] \"#{release}\" is not a valid release, try again"
+    end
+  end
 
+  puts "> Fetching closed work items from codeplex for #{release} ..."
+  #ait.fetch_workitems :type => 'fixed',  :release => release
+  ait.fetch_workitems :type => 'closed', :release => release
+  puts '> [DONE]'
+  
+  puts
   puts '=' * 80
-  ait.report(Date.parse('2009-07-29'))
+  ait.report
   puts '=' * 80
+  puts
   
   ait.done
 end
 
 if __FILE__ == $0
-  run
+  run(ARGV[0])
 end
 

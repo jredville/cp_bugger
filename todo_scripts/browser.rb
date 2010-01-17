@@ -21,7 +21,7 @@ class Browser
   def finish_loading(state = :normal)
     @ie.wait
     iter = 0
-    max_iters = 20
+    max_iters = 50
     while yield(@ie)
       if iter >= max_iters
         msg = "Loading timed out!"

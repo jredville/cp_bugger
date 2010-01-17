@@ -9,7 +9,7 @@ module CodePlex
   class Base
     def initialize(url)
       @log = Logger.new(STDOUT)
-      @log.level = Logger::DEBUG
+      @log.level = $DEBUG ? Logger::DEBUG : Logger::FATAL
       @url = "#{URL}#{url}"
       @browser = Browser.new @url, @log
     end
@@ -59,35 +59,53 @@ module CodePlex
       end
     end
 
+    def fetch_releases
+      @log.info(PROGNAME){ "Getting releases" }
+      @browser.select_list(:id, /PlannedReleaseListBox/).options
+    end
+
     def fetch_workitems(options = {})
-      defaults = {:type => :closed}
+      defaults = {:type => :closed, :release => 'All'}
       options = defaults.merge(options)
+      @release = options[:release]
 
       @log.info(PROGNAME){ "Getting \"#{options[:type]}\" work items" }
     
       require 'rubygems'
       require 'nokogiri'
-      require 'activesupport'
+      require 'active_support'
       
       link_regex = /WorkItemId/
       finish_loading
+
       @browser.select_list(:id, /StatusListBox/).select_value(options[:type].to_s.capitalize)
+      
       finish_loading
+      @browser.select_list(:id, /PlannedReleaseListBox/).select_value(options[:release])
 
-      count = 0
-      @browser.links.each do |link|
-        next if link.href !~ link_regex
-        count += 1
-        count = 0 if count > 5
+      while true
+        finish_loading
 
-        doc = Nokogiri::HTML(link.parent.parent.html)
+        count = 0
+        @browser.links.each do |link|
+          next if link.href !~ link_regex
+          count += 1
+          count = 0 if count > 5
 
-        WorkItem.create :id => doc.css('tr td.ID').inner_text,
-          :title => link.text,
-          :date => doc.css('tr td.UpdateDate span').inner_text,
-          :votes => doc.css('tr td.Votes').inner_text,
-          :severity => doc.css('tr td.Severity').inner_text
+          doc = Nokogiri::HTML(link.parent.parent.html)
+
+          WorkItem.create :id => doc.css('tr td.ID').inner_text,
+            :title => link.text,
+            :date => doc.css('tr td.UpdateDate span').inner_text,
+            :votes => doc.css('tr td.Votes').inner_text,
+            :severity => doc.css('tr td.Severity').inner_text
+        end
+
+        nxt = @browser.link(:id, /BottomNavBar_NextPageButton/)
+        break if !nxt.exists?
+        nxt.click
       end
+
       nil
     end
 
@@ -98,14 +116,18 @@ module CodePlex
     end
 
     def report(start_date = nil, out = STDOUT)
+      puts "WorkItems closed or fixed in \"#{@release}\" release"
+      count = 0
       WorkItem.order_by :date
       WorkItem.all.each_with_index do |item, i|
-        next if !start_date || item.date < start_date
-        out.print "#{item.date.to_time.strftime("%Y-%m-%d %H:%M")}\t"
-        out.print "#{item.title}\t"
-        out.print "(#{item.href})\t"
-        out.print "\n"
+        next if start_date && item.date < start_date
+        count += 1
+        #out.print "#{item.date.to_time.strftime("%Y-%m-%d %H:%M")}\t"
+        out.puts "#{item.title}"
+        out.puts "(#{item.href})"
+        out.puts
       end
+      out.puts "#{count} items"
       nil
     end
   end
@@ -125,6 +147,10 @@ module CodePlex
 
       def order_by(field = :date)
         @workitems.sort!{|x,y| x.send(field) <=> y.send(field)}
+      end
+
+      def count
+        (@workitems || []).size
       end
     end
 
