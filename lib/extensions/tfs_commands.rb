@@ -33,4 +33,13 @@ module TFSExtensions
     res = prompt :selection?
     choices[res.to_i - 1]
   end
+
+  def save_bug
+    @bug.validate
+    puts @bug
+    save = menu [:yes, :no]
+    if save == :yes
+      @bug.save
+    end
+  end
 end

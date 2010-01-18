@@ -13,7 +13,6 @@ command :new_task do
     tfs_prompt :component
     tfs_prompt :assigned_to
     @bug.description = prompt :description
-    @bug.validate
-    puts @bug
+    save_bug
   end
 end
