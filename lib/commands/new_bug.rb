@@ -6,8 +6,12 @@ command :new_bug do
   execute do
     extend_with TFSExtensions
     new_bug
-    puts @bug
-    edit_work_item
+    @bug.title = @title
+    tfs_prompt :status
+    tfs_prompt :impact
+    tfs_prompt :release
+    tfs_prompt :component
+    tfs_prompt :assigned_to
     @bug.description = prompt :description
     @bug.validate
     puts @bug
