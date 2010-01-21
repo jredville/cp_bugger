@@ -42,4 +42,19 @@ module TFSExtensions
       @bug.save
     end
   end
+
+  def extended_prompt(type)
+    puts type.to_s << ">>"
+    res = ""
+    done = nil
+    while(!done)
+      text = gets
+      if text.chomp == "DONE"
+        done = true
+      else
+        res << text
+      end
+    end
+    res
+  end
 end

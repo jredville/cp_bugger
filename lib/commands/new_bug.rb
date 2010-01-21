@@ -12,7 +12,7 @@ command :new_bug do
     tfs_prompt :release
     tfs_prompt :component
     tfs_prompt :assigned_to
-    @bug.description = prompt :description
+    @bug.description = extended_prompt :description
     save_bug
   end
 end
