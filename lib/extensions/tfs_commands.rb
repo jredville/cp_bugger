@@ -74,6 +74,7 @@ module TFSExtensions
                :title => lambda { tfs_prompt :title},
                :type => lambda { tfs_prompt :type},
                :description => lambda {@bug.description = extended_prompt :description},
+               :attach => lambda {file = prompt :filename; @bug.attach file}
                :save => lambda {save_bug;br = true}}
     keys = choices.keys
     while(!br)
