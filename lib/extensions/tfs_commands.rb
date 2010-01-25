@@ -4,12 +4,14 @@ module TFSExtensions
   def new_bug
     connect
     @bug = @con.new_work_item
+    @bug.title = @title
   end
 
   def new_task
     connect
     @bug = @con.new_work_item
     @bug.type = "Task"
+    @bug.title = @title
   end
 
   def connect
@@ -36,7 +38,7 @@ module TFSExtensions
 
   def save_bug
     @bug.validate
-    puts @bug
+    display_bug
     save = menu [:yes, :no]
     if save == :yes
       @bug.save
@@ -56,5 +58,28 @@ module TFSExtensions
       end
     end
     res
+  end
+
+  def display_bug
+    puts @bug
+  end
+
+  def edit_bug
+    br = false
+    choices = {:status => lambda { tfs_prompt :status},
+               :impact => lambda { tfs_prompt :impact},
+               :release => lambda { tfs_prompt :release},
+               :component => lambda { tfs_prompt :component},
+               :assigned_to => lambda { tfs_prompt :assigned_to},
+               :title => lambda { tfs_prompt :title},
+               :type => lambda { tfs_prompt :type},
+               :description => lambda {@bug.description = extended_prompt :description},
+               :save => lambda {save_bug;br = true}}
+    keys = choices.keys
+    while(!br)
+      display_bug
+      choice = menu keys
+      choices[choice].call
+    end
   end
 end
