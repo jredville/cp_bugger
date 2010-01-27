@@ -10,7 +10,7 @@ module TFSExtensions
   def new_task
     connect
     @bug = @con.new_work_item
-    @bug.type = "Task"
+    @bug.type = "Task".to_clr_string
     @bug.title = @title
   end
 
@@ -74,7 +74,7 @@ module TFSExtensions
                :title => lambda { tfs_prompt :title},
                :type => lambda { tfs_prompt :type},
                :description => lambda {@bug.description = extended_prompt :description},
-               :attach => lambda {file = prompt :filename; @bug.attach file}
+               :attach => lambda {file = prompt :filename; @bug.attach file},
                :save => lambda {save_bug;br = true}}
     keys = choices.keys
     while(!br)
